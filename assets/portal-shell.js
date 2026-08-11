@@ -2,13 +2,13 @@
   const style = document.createElement('style');
   style.id = 'portal-shell-style';
   style.textContent = `
-    .utility{display:block!important;height:34px!important;background:#004a80!important;color:#dce9f2!important;font:12px/34px "PingFang SC","Microsoft YaHei",sans-serif!important}
-    .utility .wrap,.header .wrap,.nav .wrap{width:min(1200px,calc(100% - 48px))!important;margin:auto!important}
+    .utility{display:block!important;position:absolute!important;inset:0 0 auto!important;z-index:2!important;height:34px!important;background:transparent!important;border-bottom:1px solid rgba(255,255,255,.16)!important;color:#dce9f2!important;font:12px/34px "PingFang SC","Microsoft YaHei",sans-serif!important}
+    .utility .wrap,.header>.wrap,.nav .wrap{width:min(1200px,calc(100% - 48px))!important;margin:auto!important}
     .utility .wrap{height:34px!important;display:flex!important;align-items:center!important;justify-content:space-between!important}
-    body .header.header{height:92px!important;position:relative!important;isolation:isolate!important;overflow:hidden!important;background-color:#004a80!important;background-image:url('assets/images/yangzhou-customs-header-simulated-v1.jpg')!important;background-position:center 48%!important;background-size:cover!important;background-repeat:no-repeat!important;border:0!important;box-shadow:none!important;color:#fff!important}
+    body .header.header{height:126px!important;position:relative!important;isolation:isolate!important;overflow:hidden!important;background-color:#004a80!important;background-image:url('assets/images/yangzhou-customs-header-simulated-v1.jpg')!important;background-position:center 48%!important;background-size:cover!important;background-repeat:no-repeat!important;border:0!important;box-shadow:none!important;color:#fff!important}
     .header:before{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background:rgba(0,54,96,.72)!important}
     .header:after{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background:linear-gradient(90deg,rgba(0,38,70,.38) 0%,rgba(0,74,128,.04) 58%,rgba(0,38,70,.18) 100%)!important;pointer-events:none!important}
-    .header .wrap{height:92px!important;position:relative!important;z-index:1!important;display:flex!important;align-items:center!important}
+    .header>.wrap{height:92px!important;margin-top:34px!important;position:relative!important;z-index:1!important;display:flex!important;align-items:center!important}
     .portal-logo{width:52px!important;height:52px!important;flex:0 0 52px!important;margin-right:16px!important;border:2px solid rgba(255,255,255,.94)!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:rgba(0,48,86,.38)!important;box-shadow:none!important;color:#fff!important;font:23px/1 "STSong","Songti SC","SimSun",serif!important}
     .brand h1{width:450px!important;height:28px!important;margin:0 0 5px!important;color:#fff!important;font:700 28px/28px "STSong","Songti SC","SimSun",serif!important;letter-spacing:2px!important}
     .brand p{width:450px!important;height:12px!important;margin:0!important;color:#d6e4ee!important;font:11px/12px Georgia,serif!important;letter-spacing:2.4px!important}
@@ -28,7 +28,7 @@
     .honor-scan figcaption span{color:#667887!important}
     .honor-scan:hover{border-color:#0068b7!important;box-shadow:inset 0 3px 0 #0068b7!important}
     .honor-scan:focus-visible{outline:3px solid rgba(0,104,183,.22)!important;outline-offset:2px!important}
-    @media(max-width:1100px){.utility .wrap,.header .wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
+    @media(max-width:1100px){.utility .wrap,.header>.wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
   `;
   document.head.appendChild(style);
 
@@ -44,15 +44,9 @@
     ['search', '全局搜索', 'portal-preview.html?page=search'],
   ];
 
-  let utility = document.querySelector('.utility');
-  if (!utility) {
-    utility = document.createElement('div');
-    utility.className = 'utility';
-    document.body.insertBefore(utility, document.body.firstChild);
-  }
-  utility.innerHTML = '<div class="wrap"><span>2026年8月11日　星期二</span><span>内部资料　·　注意保密</span></div>';
-
-  document.querySelector('.header').innerHTML = `<div class="wrap"><div class="portal-logo">关</div><div class="brand"><h1>扬州海关科室传承与交接工作平台</h1><p>CUSTOMS DEPARTMENT KNOWLEDGE PORTAL</p></div><span class="portal-user">${demoUser.name}　⌄</span></div>`;
+  const previousUtility = document.querySelector('.utility');
+  if (previousUtility) previousUtility.remove();
+  document.querySelector('.header').innerHTML = `<div class="utility"><div class="wrap"><span>2026年8月11日　星期二</span><span>内部资料　·　注意保密</span></div></div><div class="wrap"><div class="portal-logo">关</div><div class="brand"><h1>扬州海关科室传承与交接工作平台</h1><p>CUSTOMS DEPARTMENT KNOWLEDGE PORTAL</p></div><span class="portal-user">${demoUser.name}　⌄</span></div>`;
 
   const context = `<a class="portal-context" id="department-context" href="module-preview.html?page=overview&dept=${demoUser.departmentId}">我的科室：${demoUser.departmentName}　→</a>`;
   document.querySelector('.nav').innerHTML = `<div class="wrap">${items.map(([id,label,href]) => `<a class="${id === active ? 'on' : ''}" href="${href}">${label}</a>`).join('')}${context}</div>`;
