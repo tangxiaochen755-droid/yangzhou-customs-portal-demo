@@ -28,6 +28,29 @@
     .honor-scan figcaption span{color:#667887!important}
     .honor-scan:hover{border-color:#0068b7!important;box-shadow:inset 0 3px 0 #0068b7!important}
     .honor-scan:focus-visible{outline:3px solid rgba(0,104,183,.22)!important;outline-offset:2px!important}
+    .timeline{padding:0 24px 0 66px!important;position:relative!important}
+    .timeline:before{left:34px!important;top:30px!important;bottom:30px!important;width:2px!important;background:#a9bdcc!important}
+    .timeline .event{min-height:124px!important;margin:0!important;padding:18px 0 22px!important;border-bottom:1px solid #dce3e8!important;position:relative!important}
+    .timeline .event:last-child{border-bottom:0!important}
+    .timeline .event:before{left:-41px!important;top:21px!important;width:18px!important;height:18px!important;border:5px solid #eaf4fb!important;background:#0068b7!important;border-radius:50%!important}
+    .ui-icon{width:22px;height:22px;display:block;fill:currentColor}
+    .folder .icon{display:grid!important;place-items:center!important;color:#0068b7!important}
+    .folder .icon .ui-icon{width:24px;height:24px}
+    .field.search{padding:0 12px!important;display:flex!important;align-items:center!important;gap:8px!important}
+    .field.search input{width:100%;border:0;outline:0;background:transparent;color:#253b4c;font:inherit}
+    .filter-item,.result,.tree .node,.hist,.new,.a{cursor:pointer}
+    .filter-item.active{color:#004a80!important;font-weight:600!important;background:#eaf4fb!important;margin-inline:-10px;padding-inline:10px!important}
+    #prototype-layer{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,33,58,.58)}
+    #prototype-layer.open{display:flex}
+    .prototype-modal{width:min(720px,92vw);max-height:86vh;overflow:auto;position:relative;padding:28px;background:#fff;border-top:4px solid #0068b7;box-shadow:0 22px 60px rgba(0,33,58,.28);color:#263b4b}
+    .prototype-close{position:absolute;right:14px;top:10px;width:34px;height:34px;border:0;background:transparent;color:#526776;font-size:26px;cursor:pointer}
+    .prototype-modal-icon{color:#0068b7}.prototype-modal-icon>.ui-icon{width:32px;height:32px}.prototype-modal-icon img{display:block;max-width:100%;max-height:58vh;margin:0 auto 18px;object-fit:contain}
+    .prototype-modal h3{margin:12px 0;color:#004a80;font-family:"STSong","Songti SC","SimSun",serif;font-size:22px}
+    .prototype-modal-body{line-height:1.8;color:#526776}.prototype-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid #dce3e8}
+    #prototype-toast{position:fixed;left:50%;bottom:38px;z-index:10000;transform:translate(-50%,18px);padding:10px 18px;background:#003f70;color:#fff;opacity:0;pointer-events:none;transition:160ms ease;box-shadow:0 8px 24px rgba(0,33,58,.24)}
+    #prototype-toast.show{opacity:1;transform:translate(-50%,0)}
+    .quick[role="link"]{cursor:pointer}.composer input{flex:1;border:0;outline:0;background:transparent;font:inherit;color:#263b4b}.send .ui-icon{width:18px;height:18px;margin:auto}
+    .home-page .hero{background-image:url('assets/images/customs-knowledge-search-hero-blue-deepened-v3.jpg')!important}
     @media(max-width:1100px){.utility .wrap,.header>.wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
   `;
   document.head.appendChild(style);
@@ -50,4 +73,9 @@
 
   const context = `<a class="portal-context" id="department-context" href="module-preview.html?page=overview&dept=${demoUser.departmentId}">我的科室：${demoUser.departmentName}　→</a>`;
   document.querySelector('.nav').innerHTML = `<div class="wrap">${items.map(([id,label,href]) => `<a class="${id === active ? 'on' : ''}" href="${href}">${label}</a>`).join('')}${context}</div>`;
+  document.querySelectorAll('.honor-cover img').forEach((img) => { img.src = img.getAttribute('src').replace(/\.png$/, '.jpg'); });
+
+  const interactions = document.createElement('script');
+  interactions.src = 'assets/prototype-interactions.js';
+  document.body.appendChild(interactions);
 })();
