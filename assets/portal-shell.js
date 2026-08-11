@@ -18,6 +18,16 @@
     .nav a{height:49px!important;min-height:49px!important;padding:0 31px!important;border-left:1px solid rgba(255,255,255,.25)!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#0068b7!important;color:#fff!important;font-size:15px!important;font-weight:400!important;position:relative!important}
     .nav a:first-child{border-left:0!important}.nav a:hover,.nav a.on{background:#004a80!important;color:#fff!important;font-weight:600!important}.nav a.on:after{display:none!important}
     .nav .portal-context{margin-left:auto!important;border-left:1px solid rgba(255,255,255,.3)!important;color:#fff!important;white-space:nowrap!important}
+    .honor{background:#fff!important;border:1px solid #cfd8df!important;box-shadow:none!important}
+    .honor:before{color:rgba(0,104,183,.06)!important}
+    .honor-rule{padding:13px 16px!important;border:1px solid #c5d3dd!important;border-left:4px solid #0068b7!important;background:#f7fafc!important;color:#526776!important}
+    .honor-rule b{color:#004a80!important}
+    .honor-scan{border-color:#cfd8df!important;background:#fff!important;transition:border-color 160ms ease,box-shadow 160ms ease!important}
+    .honor-cover{background:#f2f5f7!important}
+    .honor-scan figcaption{border-top-color:#dce3e8!important}
+    .honor-scan figcaption span{color:#667887!important}
+    .honor-scan:hover{border-color:#0068b7!important;box-shadow:inset 0 3px 0 #0068b7!important}
+    .honor-scan:focus-visible{outline:3px solid rgba(0,104,183,.22)!important;outline-offset:2px!important}
     @media(max-width:1100px){.utility .wrap,.header .wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
   `;
   document.head.appendChild(style);
