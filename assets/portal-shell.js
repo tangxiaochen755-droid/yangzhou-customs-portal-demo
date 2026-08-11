@@ -13,6 +13,7 @@
     .portal-logo img{display:block!important;width:60px!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 1px 1px rgba(0,25,44,.35))!important}
     .brand h1{width:450px!important;height:28px!important;margin:0 0 5px!important;color:#fff!important;font:700 28px/28px "STSong","Songti SC","SimSun",serif!important;letter-spacing:2px!important}
     .brand p{width:450px!important;height:12px!important;margin:0!important;color:#d6e4ee!important;font:11px/12px Georgia,serif!important;letter-spacing:2.4px!important}
+    body main :is(h1,h2,h3,h4,h5,h6),body main .panel-h,body main .ch,.prototype-modal h3{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif!important}
     .portal-user{margin-left:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#e6f0f6!important;font-size:13px!important}
     .nav{height:52px!important;background:#0068b7!important;border:0!important;border-bottom:3px solid #004a80!important;box-shadow:none!important}
     .nav .wrap{height:49px!important;display:flex!important;align-items:stretch!important}
@@ -55,6 +56,7 @@
     @media(max-width:1100px){.utility .wrap,.header>.wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
   `;
   document.head.appendChild(style);
+  document.documentElement.dataset.portalShell = 'shared';
 
   const params = new URLSearchParams(location.search);
   const page = params.get('page') || 'home';
