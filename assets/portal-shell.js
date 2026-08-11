@@ -9,7 +9,8 @@
     .header:before{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background:rgba(0,54,96,.72)!important}
     .header:after{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background:linear-gradient(90deg,rgba(0,38,70,.38) 0%,rgba(0,74,128,.04) 58%,rgba(0,38,70,.18) 100%)!important;pointer-events:none!important}
     .header>.wrap{height:92px!important;margin-top:34px!important;position:relative!important;z-index:1!important;display:flex!important;align-items:center!important}
-    .portal-logo{width:52px!important;height:52px!important;flex:0 0 52px!important;margin-right:16px!important;border:2px solid rgba(255,255,255,.94)!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:rgba(0,48,86,.38)!important;box-shadow:none!important;color:#fff!important;font:23px/1 "STSong","Songti SC","SimSun",serif!important}
+    .portal-logo{width:60px!important;height:60px!important;flex:0 0 60px!important;margin-right:18px!important;border:0!important;border-radius:0!important;display:grid!important;place-items:center!important;background:transparent!important;box-shadow:none!important;color:#fff!important;font:23px/1 "STSong","Songti SC","SimSun",serif!important}
+    .portal-logo img{display:block!important;width:60px!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 1px 1px rgba(0,25,44,.35))!important}
     .brand h1{width:450px!important;height:28px!important;margin:0 0 5px!important;color:#fff!important;font:700 28px/28px "STSong","Songti SC","SimSun",serif!important;letter-spacing:2px!important}
     .brand p{width:450px!important;height:12px!important;margin:0!important;color:#d6e4ee!important;font:11px/12px Georgia,serif!important;letter-spacing:2.4px!important}
     .portal-user{margin-left:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#e6f0f6!important;font-size:13px!important}
@@ -69,7 +70,7 @@
 
   const previousUtility = document.querySelector('.utility');
   if (previousUtility) previousUtility.remove();
-  document.querySelector('.header').innerHTML = `<div class="utility"><div class="wrap"><span>2026年8月11日　星期二</span><span>内部资料　·　注意保密</span></div></div><div class="wrap"><div class="portal-logo">关</div><div class="brand"><h1>扬州海关科室传承与交接工作平台</h1><p>CUSTOMS DEPARTMENT KNOWLEDGE PORTAL</p></div><span class="portal-user">${demoUser.name}　⌄</span></div>`;
+  document.querySelector('.header').innerHTML = `<div class="utility"><div class="wrap"><span>2026年8月11日　星期二</span><span>内部资料　·　注意保密</span></div></div><div class="wrap"><div class="portal-logo"><img src="assets/images/customs-emblem-gold.png" alt="中国海关关徽"></div><div class="brand"><h1>扬州海关科室传承与交接工作平台</h1><p>CUSTOMS DEPARTMENT KNOWLEDGE PORTAL</p></div><span class="portal-user">${demoUser.name}　⌄</span></div>`;
 
   const context = `<a class="portal-context" id="department-context" href="module-preview.html?page=overview&dept=${demoUser.departmentId}">我的科室：${demoUser.departmentName}　→</a>`;
   document.querySelector('.nav').innerHTML = `<div class="wrap">${items.map(([id,label,href]) => `<a class="${id === active ? 'on' : ''}" href="${href}">${label}</a>`).join('')}${context}</div>`;
