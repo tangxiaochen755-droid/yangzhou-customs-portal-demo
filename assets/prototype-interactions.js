@@ -31,7 +31,7 @@
     document.body.insertAdjacentHTML('beforeend', '<div id="prototype-layer"><div class="prototype-modal" role="dialog" aria-modal="true" aria-labelledby="prototype-modal-title"><button class="prototype-close" aria-label="关闭">×</button><div class="prototype-modal-icon"></div><h3 id="prototype-modal-title"></h3><div class="prototype-modal-body"></div><div class="prototype-modal-actions"><button class="btn prototype-close-action">关闭</button><button class="btn primary prototype-download">下载示例文件</button></div></div></div><div id="prototype-toast" role="status" aria-live="polite"></div>');
     document.querySelectorAll('.prototype-close,.prototype-close-action').forEach((el) => el.addEventListener('click', closeModal));
     document.getElementById('prototype-layer').addEventListener('click', (e) => { if (e.target.id === 'prototype-layer') closeModal(); });
-    document.querySelector('.prototype-download').addEventListener('click', () => toast('原型演示：已生成下载任务'));
+    document.querySelector('.prototype-download').addEventListener('click', () => toast('文件已加入下载列表'));
   };
   const toast = (message) => {
     ensureLayer();
@@ -55,7 +55,7 @@
   document.querySelectorAll('.honor-scan').forEach((card) => {
     const replacement = card.cloneNode(true);
     card.replaceWith(replacement);
-    replacement.addEventListener('click', () => openModal(replacement.querySelector('figcaption').childNodes[0].textContent.trim(), '荣誉原件按原始比例展示；当前为原型模拟扫描件。', replacement.querySelector('img').src));
+    replacement.addEventListener('click', () => openModal(replacement.querySelector('figcaption').childNodes[0].textContent.trim(), '<p>荣誉原件按原始比例展示。</p><p>归档科室：业务一处　·　资料状态：已归档</p>', replacement.querySelector('img').src));
     replacement.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); replacement.click(); } });
   });
 
@@ -78,13 +78,14 @@
     if (action) {
       const row = action.closest('tr');
       const title = row?.querySelector('td')?.textContent.trim() || '资料详情';
-      if (e.target.textContent.includes('下载')) toast(`正在准备下载：${title}`);
-      else openModal(title, `<p>当前展示该资料的前台只读预览。</p><p>来源：扬州海关业务一处　·　演示资料</p>`);
+      const label = e.target.textContent;
+      if (label.includes('下载') && !label.includes('预览')) toast(`正在准备下载：${title}`);
+      else openModal(title, `<p>当前展示该资料的前台只读预览。</p><p>来源：扬州海关业务一处　·　访问范围：科室内部</p><p>最近更新：2026年8月6日　·　当前版本：V3.2</p>`);
       return;
     }
     const button = e.target.closest('button');
     if (button?.textContent.trim() === '查询') { runTableQuery(button); return; }
-    if (button && /下载|导出/.test(button.textContent)) { toast(`原型演示：${button.textContent.trim()}任务已生成`); return; }
+    if (button && /下载|导出/.test(button.textContent)) { toast(`${button.textContent.trim()}任务已生成`); return; }
     const kbNode = e.target.closest('.tree .node');
     if (kbNode) {
       kbNode.closest('.tree').querySelectorAll('.node').forEach((node) => node.classList.remove('sel'));
@@ -135,7 +136,9 @@
     '人员名录': 'module-preview.html?page=people', '表单下载': 'module-preview.html?page=internal',
     '部门职能': 'module-preview.html?page=duties', '人员与分工': 'module-preview.html?page=people',
     '业务知识': 'module-preview.html?page=kb', '科室历史': 'module-preview.html?page=history',
-    '荣誉墙': 'module-preview.html?page=history'
+    '荣誉墙': 'module-preview.html?page=history', '科室特色': 'module-preview.html?page=overview#features',
+    '督办协同台账': 'module-preview.html?page=work&dept=office', '办文办会规范': 'module-preview.html?page=business&dept=office',
+    '机关服务指南': 'module-preview.html?page=internal&dept=office', '海关文化记忆': 'module-preview.html?page=history&dept=office'
   };
   document.querySelectorAll('.quick,.org-link').forEach((card) => {
     const route = quickRoutes[card.querySelector('b')?.textContent.trim()];
@@ -160,8 +163,68 @@
   document.querySelectorAll('.list li').forEach((item) => {
     item.tabIndex = 0;
     item.setAttribute('role', 'button');
-    item.addEventListener('click', () => openModal(item.textContent.replace(/\d{2}-\d{2}$/, '').trim(), '<p>当前展示已发布资料或已归档记录的只读摘要。</p>'));
+    item.addEventListener('click', () => openModal(item.textContent.replace(/\d{2}-\d{2}$/, '').trim(), '<p>当前展示已发布资料或已归档记录的只读摘要。</p><p>所属科室：业务一处　·　更新时间：2026年8月</p>'));
     item.addEventListener('keydown', (e) => { if (e.key === 'Enter') item.click(); });
+  });
+
+  const peopleDetails = {
+    '赵明远': ['处长', '加工贸易、保税监管、综合协调', '0514-8909 2018', '业务专家、监交人'],
+    '王海峰': ['一级主办', '加工贸易备案、变更与核销', '0514-8909 2021', '业务骨干、复审资质'],
+    '陈晓倩': ['二级主办', '手册核销、数据复核', '0514-8909 2023', '复审资质、英语专长'],
+    '李志刚': ['三级主办', '保税维修、外发加工', '0514-8909 2025', '查验专家、业务骨干'],
+    '孙文静': ['四级主办', '综合文字、档案与培训', '0514-8909 2028', '公文写作、综合管理'],
+    '刘洋': ['一级行政执法员', '数据分析、业务台账', '0514-8909 2031', '数据分析、日语专长']
+  };
+  document.querySelectorAll('.person').forEach((card) => {
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    const name = card.querySelector('h4,b')?.textContent.trim();
+    const details = peopleDetails[name] || ['科室成员', '科室综合业务', '0514-8909 2000', '协同办理'];
+    const show = () => openModal(name || '人员名片', `<table class="table"><tr><th>职务</th><td>${details[0]}</td></tr><tr><th>主要职责</th><td>${details[1]}</td></tr><tr><th>办公电话</th><td>${details[2]}</td></tr><tr><th>专业标签</th><td>${details[3]}</td></tr></table><p>近期参与：加工贸易业务知识更新、岗位交接资料整理。</p>`);
+    card.addEventListener('click', show);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } });
+  });
+
+  document.querySelectorAll('.folders .folder:not(a)').forEach((card) => {
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.addEventListener('click', () => {
+      card.parentElement.querySelectorAll('.folder').forEach((item) => item.classList.remove('selected'));
+      card.classList.add('selected');
+      const category = card.querySelector('b')?.textContent.trim() || '全部资料';
+      const rows = document.querySelectorAll('.toolbar + .card table tr');
+      let count = 0;
+      rows.forEach((row, index) => {
+        if (!index) return;
+        const match = row.textContent.includes(category.replace(/资料库$/, '')) || category.includes('总结') && row.textContent.includes('总结') || category.includes('表单') && row.textContent.includes('表单');
+        row.hidden = !match;
+        if (match) count++;
+      });
+      toast(count ? `已筛选“${category}”，共 ${count} 份资料` : `已进入“${category}”目录`);
+    });
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter') card.click(); });
+  });
+
+  const moreRoutes = {
+    '更多 →': 'module-preview.html?page=kb', '查看完整介绍 →': 'module-preview.html?page=duties',
+    '近期动态': 'module-preview.html?page=overview', '全部人员 →': 'module-preview.html?page=people',
+    '完整时间轴 →': 'module-preview.html?page=history', '查看全部 →': 'module-preview.html?page=work'
+  };
+  document.querySelectorAll('.more').forEach((item) => {
+    if (item.matches('a') || item.closest('.results-head')) return;
+    item.tabIndex = 0;
+    item.setAttribute('role', 'link');
+    const text = item.textContent.trim();
+    const route = moreRoutes[text] || (item.closest('.panel-h')?.textContent.includes('近期动态') ? 'module-preview.html?page=overview' : '');
+    if (!route) return;
+    item.addEventListener('click', () => { location.href = route; });
+    item.addEventListener('keydown', (e) => { if (e.key === 'Enter') item.click(); });
+  });
+
+  document.querySelectorAll('.dept-card.feature').forEach((card) => {
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.addEventListener('click', () => openModal(card.querySelector('h4')?.textContent || '科室专题', `<p>${card.querySelector('p')?.textContent || ''}</p><p>专题资料：制度文件 6 份、业务案例 12 份、学习材料 8 份。</p>`));
   });
 
   document.querySelectorAll('.new').forEach((button) => button.addEventListener('click', () => {
