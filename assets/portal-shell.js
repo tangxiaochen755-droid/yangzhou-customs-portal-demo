@@ -54,7 +54,7 @@
     .quick[role="link"]{cursor:pointer}.composer input{flex:1;border:0;outline:0;background:transparent;font:inherit;color:#263b4b}.send .ui-icon{width:18px;height:18px;margin:auto}
     .person[role="button"],.folder[role="button"],.dept-card[role="button"],.more[role="link"]{cursor:pointer}.folder.selected{border-color:#0068b7!important;box-shadow:inset 0 3px 0 #0068b7!important;background:#f7fbfe!important}
     :is(.person,.folder,.dept-card,.quick,.org-link,.more)[tabindex]:focus-visible{outline:3px solid rgba(0,104,183,.24)!important;outline-offset:2px!important}
-    .home-page .hero{background-image:url('assets/images/customs-knowledge-search-hero-blue-deepened-v3.jpg')!important}
+    .home-page .hero{background-image:url('assets/images/customs-knowledge-search-hero-yangzhou-building-v4.jpg')!important}
     @media(max-width:1100px){.utility .wrap,.header>.wrap,.nav .wrap{width:calc(100% - 32px)!important}.nav a{padding-inline:20px!important}}
   `;
   document.head.appendChild(style);
