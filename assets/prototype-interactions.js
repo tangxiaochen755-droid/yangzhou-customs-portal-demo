@@ -76,6 +76,7 @@
   document.addEventListener('click', (e) => {
     const action = e.target.closest('.a');
     if (action) {
+      if (e.target.closest('a')) return;
       const row = action.closest('tr');
       const title = row?.querySelector('td')?.textContent.trim() || '资料详情';
       const label = e.target.textContent;
@@ -203,6 +204,39 @@
       toast(count ? `已筛选“${category}”，共 ${count} 份资料` : `已进入“${category}”目录`);
     });
     card.addEventListener('keydown', (e) => { if (e.key === 'Enter') card.click(); });
+  });
+
+  const generateHandover = document.getElementById('generate-handover');
+  if (generateHandover) generateHandover.addEventListener('click', () => {
+    const selected = document.querySelectorAll('.handover-type input:checked').length;
+    if (!selected) return toast('请至少选择一类交接数据');
+    toast(`已按 ${selected} 类数据生成《交接单》初稿`);
+    setTimeout(() => { location.href = 'module-preview.html?page=handover&view=draft'; }, 450);
+  });
+
+  const uploadButton = document.getElementById('handover-upload-button');
+  const fileInput = document.getElementById('handover-file-input');
+  if (uploadButton && fileInput) {
+    uploadButton.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      const list = document.querySelector('.file-list');
+      [...fileInput.files].forEach((file) => list?.insertAdjacentHTML('beforeend', `<tr><td>${file.name.replace(/[<>&]/g, '')}</td><td>${(file.size / 1024 / 1024).toFixed(1)}MB</td><td class="a">预览　删除</td></tr>`));
+      if (fileInput.files.length) toast(`已加入 ${fileInput.files.length} 个交接附件`);
+    });
+  }
+
+  document.getElementById('handover-save')?.addEventListener('click', () => toast('交接单草稿已保存'));
+  document.getElementById('handover-submit')?.addEventListener('click', () => {
+    toast('交接单已提交接收人确认');
+    setTimeout(() => { location.href = 'module-preview.html?page=handover&view=receive'; }, 500);
+  });
+  document.getElementById('handover-return')?.addEventListener('click', () => {
+    const reason = window.prompt('请输入退回原因（必填）', '请补充未办结案件的下一办理期限');
+    if (reason?.trim()) toast('已退回移交人填写');
+  });
+  document.getElementById('handover-receive')?.addEventListener('click', () => {
+    toast('已确认接收，交接单进入后台监交审核');
+    setTimeout(() => { location.href = 'module-preview.html?page=handover&view=pending'; }, 500);
   });
 
   const moreRoutes = {
