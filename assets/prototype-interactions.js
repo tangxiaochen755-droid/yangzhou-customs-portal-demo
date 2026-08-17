@@ -62,18 +62,38 @@
   const runTableQuery = (button) => {
     const toolbar = button.closest('.toolbar');
     const query = toolbar?.querySelector('input[type="search"]')?.value.trim().toLowerCase() || '';
-    const rows = toolbar?.nextElementSibling?.querySelectorAll('table tr') || [];
+    const rows = toolbar?.nextElementSibling?.querySelectorAll('table tr[data-status], table tr:not(:first-child):not(.handover-empty)') || [];
+    const activeStatus = document.querySelector('.handover-stat.active')?.dataset.filter || 'all';
     let shown = 0;
-    rows.forEach((row, index) => {
-      if (!index) return;
-      const match = !query || row.textContent.toLowerCase().includes(query);
+    rows.forEach((row) => {
+      const statusMatch = activeStatus === 'all' || row.dataset.status === activeStatus;
+      const match = statusMatch && (!query || row.textContent.toLowerCase().includes(query));
       row.hidden = !match;
       if (match) shown++;
     });
-    toast(query ? `已找到 ${shown} 条匹配资料` : '已恢复全部资料');
+    const empty = toolbar?.nextElementSibling?.querySelector('.handover-empty');
+    if (empty) empty.hidden = shown !== 0;
+    const result = toolbar?.querySelector('.handover-filter-result');
+    if (result) result.textContent = `当前显示 ${shown} 条记录`;
+    if (result) toast(`已筛选 ${shown} 条交接记录`);
+    else toast(query ? `已找到 ${shown} 条匹配资料` : '已恢复全部资料');
   };
 
   document.addEventListener('click', (e) => {
+    const handoverStat = e.target.closest('.handover-stat');
+    if (handoverStat) {
+      document.querySelectorAll('.handover-stat').forEach((card) => {
+        const active = card === handoverStat;
+        card.classList.toggle('active', active);
+        card.setAttribute('aria-pressed', String(active));
+      });
+      const labels = { all: '全部', returned: '待我填写', receive: '待我确认', archived: '已归档' };
+      const statusField = document.querySelector('.handover-filter-result')?.closest('.toolbar')?.querySelectorAll('.field')[1];
+      if (statusField) statusField.textContent = `交接状态：${labels[handoverStat.dataset.filter] || '全部'} ▾`;
+      document.querySelector('.handover-table')?.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.querySelector('.handover-filter-result')?.closest('.toolbar')?.querySelector('button')?.click();
+      return;
+    }
     const action = e.target.closest('.a');
     if (action) {
       if (e.target.closest('a')) return;
