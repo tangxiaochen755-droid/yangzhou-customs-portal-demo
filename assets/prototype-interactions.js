@@ -87,7 +87,7 @@
         card.classList.toggle('active', active);
         card.setAttribute('aria-pressed', String(active));
       });
-      const labels = { all: '全部', returned: '待我填写', receive: '待我确认', archived: '已归档' };
+      const labels = { all: '全部', returned: '待我填写', receive: '待我接收', archived: '我已完成' };
       const statusField = document.querySelector('.handover-filter-result')?.closest('.toolbar')?.querySelectorAll('.field')[1];
       if (statusField) statusField.textContent = `交接状态：${labels[handoverStat.dataset.filter] || '全部'} ▾`;
       document.querySelector('.handover-table')?.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
