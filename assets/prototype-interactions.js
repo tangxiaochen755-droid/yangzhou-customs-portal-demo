@@ -80,6 +80,8 @@
   };
 
   document.addEventListener('click', (e) => {
+    const noAccess = e.target.closest('.handover-no-access');
+    if (noAccess) { toast('暂无权限查看'); return; }
     const handoverStat = e.target.closest('.handover-stat');
     if (handoverStat) {
       document.querySelectorAll('.handover-stat').forEach((card) => {
@@ -135,6 +137,21 @@
   document.querySelectorAll('.toolbar input[type="search"]').forEach((input) => input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') input.closest('.toolbar')?.querySelector('button')?.click();
   }));
+
+  document.querySelectorAll('.department-space-tab').forEach((tab, index, tabs) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((item) => { item.classList.toggle('active', item === tab); item.setAttribute('aria-selected', String(item === tab)); });
+      document.querySelectorAll('.department-space-panel').forEach((panel) => { panel.hidden = panel.dataset.panel !== tab.dataset.section; });
+      const panel = document.querySelector(`.department-space-panel[data-panel="${tab.dataset.section}"]`);
+      panel?.querySelector('h3')?.focus?.();
+    });
+    tab.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+      event.preventDefault();
+      const next = (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus(); tabs[next].click();
+    });
+  });
 
   const portalSearch = document.querySelector('.hero .search input, .search-page .search input');
   const query = new URLSearchParams(location.search).get('q');
