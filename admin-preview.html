@@ -10,7 +10,13 @@
   <style>
     .space-menu-parent{position:relative}.space-menu-parent:after{content:"⌄";position:absolute;right:17px;color:#aeb2b9}.space-menu-parent.parent-active{color:#fff}.submenu{padding:2px 0 6px;background:rgba(0,0,0,.1)}.menu-subitem{width:100%;height:34px;display:flex;align-items:center;padding:0 16px 0 48px;color:#bfc4ca;text-decoration:none;border:0;border-left:3px solid transparent;background:transparent;font-size:13px;text-align:left}.menu-subitem:hover{background:rgba(255,255,255,.06);color:#fff}.menu-subitem.active{background:#22252a;color:#fff;border-left-color:#bfc3c8}.menu-subitem:before{content:"";width:4px;height:4px;margin-right:9px;border-radius:50%;background:currentColor;opacity:.7}.menu-add-section{margin-top:3px;color:#fff;border-top:1px solid rgba(255,255,255,.1)}.menu-add-section:before{content:"＋";width:auto;height:auto;background:none;font-size:16px;opacity:1}
   </style>
-  <link id="highfi-theme" rel="stylesheet" href="assets/admin-highfi.css" media="not all">
+  <style>html.highfi-boot body{visibility:hidden}</style>
+  <script>
+    if(new URLSearchParams(location.search).get('highfi')==='1'){
+      document.documentElement.classList.add('highfi-boot');
+      const theme=document.createElement('link');theme.id='highfi-theme';theme.rel='stylesheet';theme.href='assets/admin-highfi.css';document.head.append(theme);
+    }
+  </script>
 </head>
 <body>
 <div class="app">
@@ -85,7 +91,7 @@ document.querySelectorAll('.menu-subitem').forEach(a=>a.classList.toggle('active
 if(page==='spaces'){document.querySelector('.dept').innerHTML='<b>管理范围：扬州海关全部科室</b>平台管理员 · 陈管理员';document.querySelector('.role').textContent='陈管理员 ▾'}
 document.getElementById('view-tag').textContent=titles[page];document.getElementById('main').innerHTML=renderers[page]();
 const highfi=new URLSearchParams(location.search).get('highfi')==='1';
-if(highfi){document.getElementById('highfi-theme').media='all';document.querySelector('.logo-mark').innerHTML='<img src="assets/images/customs-emblem-gold.png" alt="海关关徽">';document.querySelectorAll('a[href^="?"]').forEach(a=>{const url=new URL(a.href);url.searchParams.set('highfi','1');a.href=url.href});document.querySelectorAll('[onclick*="location.href"]').forEach(el=>el.setAttribute('onclick',el.getAttribute('onclick').replace('?page=','?highfi=1&page=')));document.title='扬州海关科室传承与交接工作平台 · 后台高保真原型'}
+if(highfi){document.querySelector('.logo-mark').innerHTML='<img src="assets/images/customs-emblem-gold.png" alt="海关关徽">';document.querySelectorAll('a[href^="?"]').forEach(a=>{const url=new URL(a.href);url.searchParams.set('highfi','1');a.href=url.href});document.querySelectorAll('[onclick*="location.href"]').forEach(el=>el.setAttribute('onclick',el.getAttribute('onclick').replace('?page=','?highfi=1&page=')));document.title='扬州海关科室传承与交接工作平台 · 后台高保真原型'}
 const mask=document.getElementById('modal-mask'),body=document.getElementById('modal-body');
 function openModal(title,content,confirm='保存'){document.getElementById('modal-title').textContent=title;body.innerHTML=content;document.getElementById('modal-confirm').textContent=confirm;mask.classList.add('open');setTimeout(()=>body.querySelector('input,select')?.focus(),0)}
 function closeModal(){mask.classList.remove('open')}
@@ -98,7 +104,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('button,[data-add
 document.getElementById('modal-confirm').addEventListener('click',()=>{const sectionName=document.getElementById('section-name');if(sectionName&&!sectionName.value.trim()){sectionName.focus();toast('请输入板块名称');return}const personName=document.getElementById('person-name');if(personName&&!personName.value.trim()){personName.focus();toast('请输入人员姓名');return}const positionName=document.getElementById('position-name');if(positionName&&!positionName.value.trim()){positionName.focus();toast('请输入岗位名称');return}const title=document.getElementById('modal-title').textContent;closeModal();toast(title==='选择已有文档'?'所选文档已加入展示，查看权限继承原文档':title==='新增人员'?'人员已加入业务一处组织架构':title==='新增岗位'?'岗位已加入业务一处组织架构':'板块已创建为草稿，发布后前台自动增加对应栏目')});
 mask.addEventListener('click',e=>{if(e.target===mask)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 document.documentElement.dataset.prototypeReady='true';
-if(highfi)document.documentElement.dataset.highfiReady='true';
+if(highfi){const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{document.documentElement.classList.remove('highfi-boot');document.documentElement.dataset.highfiReady='true'}));const theme=document.getElementById('highfi-theme');if(theme.sheet)reveal();else{theme.addEventListener('load',reveal,{once:true});theme.addEventListener('error',reveal,{once:true})}}
 </script>
 </body>
 </html>
